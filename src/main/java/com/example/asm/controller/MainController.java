@@ -14,4 +14,9 @@ public class MainController {
     public String submitForm(){
         return "redirect:/domain";
     }
+
+    @GetMapping(value = "chart")
+    public String showChart(){
+        return "chart";
+    }
 }

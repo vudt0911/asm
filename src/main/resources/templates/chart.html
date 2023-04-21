@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" />
+    <link rel="stylesheet" href="/admin-template/css/vendors.bundle.min.css" />
+    <link rel="stylesheet" href="/admin-template/css/main.bundle.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js" integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<!--    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">-->
+<!--    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.material.min.css">-->
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script language="javascript" type="text/javascript">
+            function sortTable(n) {
+                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                table = document.getElementById("example");
+                switching = true;
+                //Set the sorting direction to ascending:
+                dir = "asc";
+                /*Make a loop that will continue until
+                no switching has been done:*/
+                while (switching) {
+                    //start by saying: no switching is done:
+                    switching = false;
+                    rows = table.rows;
+                    /*Loop through all table rows (except the
+                    first, which contains table headers):*/
+                    for (i = 1; i < (rows.length - 1); i++) {
+                        //start by saying there should be no switching:
+                        shouldSwitch = false;
+                        /*Get the two elements you want to compare,
+                        one from current row and one from the next:*/
+                        x = rows[i].getElementsByTagName("TD")[n];
+                        y = rows[i + 1].getElementsByTagName("TD")[n];
+                        /*check if the two rows should switch place,
+                        based on the direction, asc or desc:*/
+                        if (dir == "asc") {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } else if (dir == "desc") {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                //if so, mark as a switch and break the loop:
+                                shouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (shouldSwitch) {
+                        /*If a switch has been marked, make the switch
+                        and mark that a switch has been done:*/
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        //Each time a switch is done, increase this count by 1:
+                        switchcount++;
+                    } else {
+                        /*If no switching has been done AND the direction is "asc",
+                        set the direction to "desc" and run the while loop again.*/
+                        if (switchcount == 0 && dir == "asc") {
+                            dir = "desc";
+                            switching = true;
+                        }
+                    }
+                }
+            }
+            // $('#example').DataTable( {
+            //     "paging":   false,
+            //     "ordering": true,
+            //     "info":     false,
+            //
+            //     searching: false
+            // } );
+    </script>
+    <title>ASM</title>
+</head>
+
+<body>
+<!-- Navigation -->
+<div class="app-admin-wrap-layout-1 sidebar-full sidebar-theme-slate">
+    <div th:replace="~{/fragments/header.html}"></div>
+    <div class="main-content-wrap">
+        <!-- Start::Main header  -->
+        <header class="main-header bg-card d-flex flex-row justify-content-between align-items-center px-lg">
+            <!-- Start::Header menu-->
+            <!-- End::Header menu-->
+        </header>
+        <div class="main-content-body">
+            <!-- Start:: content (Your custom content)  -->
+            <div class="subheader px-lg" style="padding: 0">
+                <div class="subheader-container">
+                    <div class="subheader-main">
+                        <nav aria-label="breadcrumb" class="ul-breadcrumb">
+                            <ol class="ul-breadcrumb-items">
+                                <li class="breadcrumb-home"><a href="#"> <i class="material-icons"
+                                >home</i></a></li>
+                                <li class="breadcrumb-item"><a href="#">ASM</a></li>
+                                <li class="breadcrumb-item active"><a href="#">Chart Management</a></li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row align-items-center">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-group" style="position: relative;width: 25%;margin-left: auto;margin-bottom: 15px;float: left">
+<!--                                    <select class="form-control js-basic-example2" id="filterType" style="margin-left:-2%;background: #cfcfcf;border-radius: 20px;padding: 10px 20px;" onchange="filter()">-->
+<!--                                        <option value="application" ${filter == 'application' ? 'selected' : ''}><spring:message code="file.media"/></option>-->
+<!--                                        <option value="image" ${filter == 'image' ? 'selected' : ''}><spring:message code="file.file"/></option>-->
+<!--                                    </select>-->
+                                    <div class="input-group-append" style="position: absolute;right: 0;z-index: 10;">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="input-group" style="position: relative;width: 75%;margin-left: auto;margin-bottom: 15px;">
+                                    <input class="form-control" id="textSearch" value="" type="text" placeholder="Search for whatever" style="margin-left:-2%;background: #cfcfcf;border-radius: 20px;padding: 10px 20px;">
+                                    <div class="input-group-append" style="position: absolute;right: 0;z-index: 10;">
+                                        <button class="btn btn-secondary"  type="button" th:onclick="|handleSearch()|">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-header" style="background: #242939 ;display: flex;justify-content: space-between;">
+                            <h2 class="p-1 m-0 text-16 font-weight-semi " style="color: white">Chart Management</h2>
+                            <div style="color: white" class="p-1 m-0 text-16">
+<!--                                <i class="fa fa-plus" aria-hidden="true" data-toggle="modal" data-target="#ModalAdd" style="cursor: pointer"></i>-->
+                            </div>
+                        </div>
+<!--                        chart-->
+                        <div style="margin: 3rem; display: flex; align-items: center;  justify-content: center;">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!---->
+            <!-- End:: Footer-->
+        </div>
+        <!-- End::Main header-->
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            datasets: [
+                {
+                    label: "# of Votes",
+                    data: [6, 59, 80, 81, 56, 55, 40],
+                    borderWidth: 1,
+                    backgroundColor: [
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(255, 159, 64, 0.2)",
+                        "rgba(255, 205, 86, 0.2)",
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(54, 162, 235, 0.2)",
+                        "rgba(153, 102, 255, 0.2)",
+                        "rgba(201, 203, 207, 0.2)"
+                    ],
+                    borderColor: [
+                        "rgb(255, 99, 132)",
+                        "rgb(255, 159, 64)",
+                        "rgb(255, 205, 86)",
+                        "rgb(75, 192, 192)",
+                        "rgb(54, 162, 235)",
+                        "rgb(153, 102, 255)",
+                        "rgb(201, 203, 207)"
+                    ]
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
